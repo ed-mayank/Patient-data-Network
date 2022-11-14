@@ -25,16 +25,16 @@ rule OrgsCanSeeTheirData {
   action: ALLOW
 }
 
-rule EveryoneCanShareTheirOwnAssetsWithAPractitioner {
-    description: "Allow all participants to submit transactions"
+rule DoctorCanShareTheirOwnAssetsWithADoctor {
+    description: "Allow Doctor to submit transactions"
     participant: "org.cc.patientdatanetwork.Patient"
     operation: CREATE
     resource: "org.cc.patientdatanetwork.DoctorToDoctorDataSharing"
     action: ALLOW
 }
 
-rule EveryoneCanShareTheirOwnAssetsWithAPractitioner {
-    description: "Allow all participants to submit transactions"
+rule PatientCanShareTheirOwnAssetsWithADoctor {
+    description: "Allow Patient to submit transactions"
     participant: "org.cc.patientdatanetwork.Patient"
     operation: CREATE
     resource: "org.cc.patientdatanetwork.PatientToDoctorDataSharing"
