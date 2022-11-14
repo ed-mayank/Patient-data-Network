@@ -1,0 +1,67 @@
+rule PatientsHaveAccessToTheirData {
+  description:      "Allow patients to see all of their data"
+  participant(p):   "org.cc.patientdatanetwork.Patient"
+  operation: ALL
+  resource(r): "org.cc.patientdatanetwork.*"
+  condition: (r.owner.getIdentifier() == p.getIdentifier())
+  action: ALLOW
+}
+
+rule PractitionersCanSeeDataSharedWithThem {
+  description:      "Allow practitioners to see data that is shared with them"
+  participant(p):   "org.cc.patientdatanetwork.Practitioner"
+  operation: READ, UPDATE
+  resource(r): "org.cc.patientdatanetwork.*"
+  condition: (r.practitionersWithAccess.indexOf(p.getIdentifier()) > -1)
+  action: ALLOW
+}
+
+rule OrgsCanSeeTheirData {
+  description:      "Allow organizations to see data where they are the custodian"
+  participant(p):   "org.cc.patientdatanetwork.Organization"
+  operation: READ
+  resource(r): "org.cc.patientdatanetwork.*"
+  condition: (r.orgsWithAccess.indexOf(p.getIdentifier()) > -1)
+  action: ALLOW
+}
+
+rule EveryoneCanShareTheirOwnAssetsWithAPractitioner {
+    description: "Allow all participants to submit transactions"
+    participant: "org.cc.patientdatanetwork.Patient"
+    operation: CREATE
+    resource: "org.cc.patientdatanetwork.ShareWithPractitioner"
+    action: ALLOW
+}
+
+
+rule EveryoneCanShareTheirOwnAssetsWithAnOrg {
+    description: "Allow all participants to submit transactions"
+    participant: "org.cc.patientdatanetwork.Patient"
+    operation: CREATE
+    resource: "org.cc.patientdatanetwork.ShareWithOrg"
+    action: ALLOW
+}
+
+rule SystemACL {
+  description:  "System ACL to permit all access"
+  participant: "org.hyperledger.composer.system.Participant"
+  operation: ALL
+  resource: "org.hyperledger.composer.system.**"
+  action: ALLOW
+}
+
+rule NetworkAdminUser {
+    description: "Grant business network administrators full access to user resources"
+    participant: "org.hyperledger.composer.system.NetworkAdmin"
+    operation: ALL
+    resource: "**"
+    action: ALLOW
+}
+
+rule NetworkAdminSystem {
+    description: "Grant business network administrators full access to system resources"
+    participant: "org.hyperledger.composer.system.NetworkAdmin"
+    operation: ALL
+    resource: "org.hyperledger.composer.system.**"
+    action: ALLOW
+}

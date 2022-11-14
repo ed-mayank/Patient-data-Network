@@ -1,0 +1,140 @@
+namespace org.cc.patientdatanetwork
+
+abstract concept Address {
+  o String street
+  o String city
+  o String country
+}
+
+concept AreaAddress extends Address {
+  o String AreaCode
+  o String zipcode
+}
+
+abstract participant Person identified by participantId {
+  o String participantId
+  o String firstName
+  o String lastName
+  o String gender optional
+  o DateTime dateofbirth optional
+}
+
+participant Patient extends Person {
+  o String medicalRecordNumber
+  o String resourceUri optional
+  o String resourceHash optional
+  o Address address optional
+}
+
+participant Practitioner extends Person {
+  o String medicalIdNumber optional
+  --> Organization workingAt
+  o String resourceUri optional
+  o String resourceHash optional
+  o Address address optional
+}
+
+participant Organization identified by organizationId {
+  o String organizationId
+  o String name
+  o Address address optional
+}
+
+
+abstract asset PatientData identified by assetId {
+  o String assetId
+  --> Patient owner
+  --> Organization custodian optional
+  o String resourceUri optional
+  o String resourceHash optional
+  o String [] practitionersWithAccess optional
+  o String [] orgsWithAccess optional
+}
+
+enum MedicationStatus {
+  o ACTIVE
+  o INACTIVE
+  o ENTERED_IN_ERROR
+}
+
+asset Medication extends PatientData {
+  o MedicationStatus status
+  o String detail optional
+}
+
+asset Procedure extends PatientData {
+  o String procedureName 
+  o String detail optional
+}
+
+asset ImagingStudy extends PatientData {
+  o String modality
+  o String note optional
+}
+
+asset Observation extends PatientData {
+  o String detail optional
+}
+
+asset Appointment extends PatientData {
+  o String detail optional
+}
+
+ asset Condition extends PatientData 
+ { 
+     o String detail optional
+ }
+
+ asset DiagnosticReport extends PatientData 
+ { 
+     o String detail optional
+ }
+
+ asset FamilyMemberHistory extends PatientData 
+ { 
+     o String detail optional
+ }
+
+ asset Consent extends PatientData 
+ { 
+     o String detail optional
+ }
+
+
+/**
+ * Sharing with Practitioners
+ */
+transaction ShareWithPractitioner {
+  o String assetType
+  o String assetReference
+  --> Practitioner practitioner
+}
+
+/**
+ * Sharing with Orgs
+ */
+
+transaction ShareWithOrg {
+  o String assetType
+  o String assetReference
+  --> Organization organization
+}
+
+/**
+ * Events
+ */
+event AssetSharedwithPractitioner {
+  o String assetType
+  o String assetReference
+  o String auditResourceUri optional
+  o String resourceHash optional
+  --> Practitioner practitioner
+}
+
+event AssetSharedWithOrg {
+  o String assetType
+  o String assetReference
+  o String auditResourceUri optional
+  o String resourceHash optional
+  --> Organization organization
+}
