@@ -84,7 +84,13 @@ asset DiagnosticReport extends PatientData
 /**
  * Sharing with Practitioners
  */
-transaction ShareWithPractitioner {
+transaction DoctorToDoctorDataSharing {
+  o String assetType
+  o String assetReference
+  --> Practitioner practitioner
+}
+
+transaction PatientToDoctorDataSharing {
   o String assetType
   o String assetReference
   --> Practitioner practitioner
