@@ -62,16 +62,6 @@ asset Medication extends PatientData {
   o String detail optional
 }
 
-asset Procedure extends PatientData {
-  o String procedureName 
-  o String detail optional
-}
-
-asset ImagingStudy extends PatientData {
-  o String modality
-  o String note optional
-}
-
 asset Observation extends PatientData {
   o String detail optional
 }
@@ -80,25 +70,15 @@ asset Appointment extends PatientData {
   o String detail optional
 }
 
- asset Condition extends PatientData 
- { 
-     o String detail optional
- }
+asset Condition extends PatientData 
+{ 
+    o String detail optional
+}
 
- asset DiagnosticReport extends PatientData 
- { 
-     o String detail optional
- }
-
- asset FamilyMemberHistory extends PatientData 
- { 
-     o String detail optional
- }
-
- asset Consent extends PatientData 
- { 
-     o String detail optional
- }
+asset DiagnosticReport extends PatientData 
+{ 
+    o String detail optional
+}
 
 
 /**
